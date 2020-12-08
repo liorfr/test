@@ -1,0 +1,12 @@
+VIEW EMPLOYEES_ANON_RELAXED AS
+  SELECT ID, SITE, GENDER, AGE, SALARY
+  FROM EMPLOYEES
+  WITH ANONYMIZATION (
+    ALGORITHM 'K-ANONYMITY'
+    --PARAMETERS '{"k": 3}'
+    PARAMETERS '{"data_change_strategy": "restricted", "k":3, "recoding":"multi_dimensional_strict"}'
+    COLUMN ID PARAMETERS '{"is_sequence": true}'
+    COLUMN SITE PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"view":"V_GEOGRAPHIC_HIERARCHY"}}'
+    COLUMN GENDER PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"embedded": [["Female"], ["Male"]]}}'
+    COLUMN AGE PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"function":"GROUP_AGE", "levels":3}}'
+  )

@@ -1,0 +1,23 @@
+ID: Anonymization_Hierarchies
+_schema-version: '2.1'
+description: HANA Anonymization
+version: 0.0.1
+
+modules:
+ - name: db
+   type: hdb
+   path: db
+   requires:
+    - name: hdi_db
+
+resources:
+ - name: hdi_db
+   parameters:
+      config:
+         database_id: 1b628954-30ce-428c-9ffe-22a94637dc38
+         schema: anonymization_hierarchies
+         makeUniqueName: false
+      service-name: Anonymization_Hierarchies
+   properties:
+      hdi-container-name: ${service-name}
+   type: com.sap.xs.hdi-container

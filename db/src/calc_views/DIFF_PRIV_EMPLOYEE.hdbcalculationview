@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:DataFoundation="http://www.sap.com/ndb/BiModelDataFoundation.ecore" xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" id="DIFF_PRIV_EMPLOYEE" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="DIFF_PRIV_EMPLOYEE"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES_DIFF_PRIV">
+    <resourceUri>EMPLOYEES_DIFF_PRIV</resourceUri>
+  </DataSource>
+  <DataSource id="GEOGRAPHIC_HIERARCHY">
+    <resourceUri>GEOGRAPHIC_HIERARCHY</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="GENDER"/>
+    
+      <viewAttribute id="SITE"/>
+    
+      <viewAttribute id="SALARY"/>
+      <viewAttribute id="SALARY_DIFF_PRIV"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES_DIFF_PRIV"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="PARENT"/>
+    
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+      <viewAttribute id="SALARY_DIFF_PRIV" aggregationType="sum"/>
+      <viewAttribute id="CHILD"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="GEOGRAPHIC_HIERARCHY">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PARENT" source="PARENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHILD" source="CHILD"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY_DIFF_PRIV" source="SALARY_DIFF_PRIV"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHILD" source="SITE"/>
+    </input>
+    <joinAttribute name="CHILD"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="PARENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PARENT"/>
+      <keyMapping columnObjectName="Join_1" columnName="PARENT"/>
+    </attribute>
+  
+    <attribute id="ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ID"/>
+    </attribute>
+    <attribute id="GENDER" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="Join_1" columnName="GENDER"/>
+    </attribute>
+    <attribute id="SITE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE"/>
+    </attribute>
+    <attribute id="CHILD" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHILD"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHILD"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="SALARY_1" order="8" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="SALARY_DIFF_PRIV" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY DIFFERENTIAL PRIVACY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY_DIFF_PRIV"/>
+    </measure>
+    <measure id="SALARY_DIFF_PRIV_1" order="10" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG DIFFERENTIAL PRIVACY SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY_DIFF_PRIV"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="2" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="BIGINT" length="">
+      <descriptions defaultDescription="EMPLOYEE COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      
+      </measure>
+    <measure id="SALARY_VARIANCE" order="3" aggregationType="sum" measureType="simple" datatype="DECIMAL" length="13" scale="3" presentationScale="2" expressionLanguage="SQL" aggregatable="true">
+      <descriptions defaultDescription="SALARY VARIANCE"/>
+      <formula>(&quot;SALARY&quot;-&quot;SALARY_DIFF_PRIV&quot;)/&quot;SALARY&quot;</formula>
+      
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions>
+    <localDimension id="Geographic_Hierarchy">
+      <attributeRef xsi:type="DataFoundation:Attribute">CHILD</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">PARENT</attributeRef>
+      <hierarchies>
+        <hierarchy xsi:type="Dimension:ParentChildHierarchy" id="Geographic_Hierarchy" aggregateAllNodes="false" orphanedNodesHandling="ROOT_NODES" rootNodeVisibility="ADD_ROOT_NODE_IF_DEFINED" cacheEnabled="true" cycleHandling="BREAKUP" emptyValueIsNull="false">
+          <descriptions defaultDescription="Geographic Hierarchy"/>
+          <unassignedMemberProperties mode="FALSE"/>
+          <attributeParentPair attribute="CHILD" parentAttribute="PARENT"/>
+        </hierarchy>
+      </hierarchies>
+    </localDimension>
+  </localDimensions>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="241" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="174" y="370"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="189" y="212"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="GEOGRAPHIC_HIERARCHY" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="224"/>
+    </shape>
+  
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

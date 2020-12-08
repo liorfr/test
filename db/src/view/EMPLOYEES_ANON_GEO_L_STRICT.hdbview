@@ -1,0 +1,16 @@
+VIEW EMPLOYEES_ANON_GEO_L_STRICT AS
+  SELECT ID, SITE, SITE_LEVEL_1, SITE_LEVEL_2, SITE_LEVEL_3, SITE_LEVEL_4, GENDER, AGE, SALARY
+  FROM EMPLOYEES_LEVEL_CV
+  WITH ANONYMIZATION (
+    ALGORITHM 'K-ANONYMITY'
+    PARAMETERS '{"k": 3}'
+    --PARAMETERS '{"data_change_strategy": "restricted", "k":3, "recoding":"multi_dimensional_strict"}'
+    COLUMN ID PARAMETERS '{"is_sequence": true}'
+   -- COLUMN SITE_LEVEL_1 PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"view":"V_GEOGRAPHIC_HIERARCHY"}}'
+      COLUMN SITE_LEVEL_2 PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"view":"V_GEOGRAPHIC_HIERARCHY_LEVEL2"}}'
+	  COLUMN SITE_LEVEL_3 PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"view":"V_GEOGRAPHIC_HIERARCHY_LEVEL3"}}'
+      COLUMN SITE_LEVEL_4 PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"view":"V_GEOGRAPHIC_HIERARCHY"}}'
+    --COLUMN GENDER PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"embedded": [["Female"], ["Male"]]}}'
+    --COLUMN AGE PARAMETERS '{"is_quasi_identifier":true, "hierarchy":{"function":"GROUP_AGE", "levels":3}}'
+  )
+  

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:DataFoundation="http://www.sap.com/ndb/BiModelDataFoundation.ecore" xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" id="ANON_EMPLOYEES_GEO_STRICT_CV" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="ANON_EMPLOYEES_GEO_STRICT_CV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES_ANON_GEO_L_STRICT">
+    <resourceUri>EMPLOYEES_ANON_GEO_L_STRICT</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews/>
+<logicalModel id="EMPLOYEES_ANON_GEO_L_STRICT">
+  <attributes>
+    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="ID"/>
+    </attribute>
+    <attribute id="SITE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SITE"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_1" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_1"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SITE_LEVEL_1"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_2" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_2"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SITE_LEVEL_2"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_3" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_3"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SITE_LEVEL_3"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_4" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_4"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SITE_LEVEL_4"/>
+    </attribute>
+    <attribute id="GENDER" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="GENDER"/>
+    </attribute>
+    <attribute id="AGE" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGE"/>
+      <keyMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="AGE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SALARY"/>
+    </measure>
+    <measure id="AVG_SALARY" order="11" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG SALARY"/>
+      <measureMapping columnObjectName="EMPLOYEES_ANON_GEO_L_STRICT" columnName="SALARY"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="10" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="BIGINT" length="">
+      <descriptions defaultDescription="EMPLOYEE COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions>
+    <localDimension id="Geographic_Hierarchy">
+      <attributeRef xsi:type="DataFoundation:Attribute">SITE_LEVEL_1</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">SITE_LEVEL_2</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">SITE_LEVEL_3</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">SITE_LEVEL_4</attributeRef>
+      <hierarchies>
+        <hierarchy xsi:type="Dimension:LeveledHierarchy" id="Geographic_Hierarchy" aggregateAllNodes="false" orphanedNodesHandling="ROOT_NODES" rootNodeVisibility="DO_NOT_ADD_ROOT_NODE" withRootNode="false" nodeStyle="NAME_PATH_ENFORCED" cacheEnabled="true" cycleHandling="BREAKUP" emptyValueIsNull="false">
+          <descriptions defaultDescription="Geographic Hierarchy"/>
+          <unassignedMemberProperties mode="FALSE"/>
+          <levels>
+            <level levelAttribute="SITE_LEVEL_1" levelType="MDLEVEL_TYPE_REGULAR" order="1" orderAttribute="SITE_LEVEL_1" sortDirection="ASC"/>
+            <level levelAttribute="SITE_LEVEL_2" levelType="MDLEVEL_TYPE_REGULAR" order="2" orderAttribute="SITE_LEVEL_2" sortDirection="ASC"/>
+            <level levelAttribute="SITE_LEVEL_3" levelType="MDLEVEL_TYPE_REGULAR" order="3" orderAttribute="SITE_LEVEL_3" sortDirection="ASC"/>
+            <level levelAttribute="SITE_LEVEL_4" levelType="MDLEVEL_TYPE_REGULAR" order="4" orderAttribute="SITE_LEVEL_4" sortDirection="ASC"/>
+          </levels>
+        </hierarchy>
+      </hierarchies>
+    </localDimension>
+  </localDimensions>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

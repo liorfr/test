@@ -1,0 +1,37 @@
+{
+	"format_version": 1,
+	
+	"imports": [
+		{
+			"target_table": "H_ORG_STRUCTURE",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "H_ORG_STRUCTURE.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ORG_ID",
+					"PARENT_ID",
+					"JOB_TITLE",
+					"DEPARTMENT",
+					"SEX"
+				]
+			}
+		},
+		{
+			"target_table": "H_EXPENSES",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "H_EXPENSES.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ORG_ID",
+					"EXPENSE_AMOUNT"
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,14 @@
+FUNCTION GROUP_AGE (age NVARCHAR(10), level INTEGER)
+RETURNS outValue NVARCHAR(50) AS
+BEGIN
+  DECLARE defineValue INTEGER DEFAULT 5;
+  DECLARE interval INTEGER;
+  DECLARE rangeFrom INTEGER;
+  IF (level > 0) THEN 
+    interval := defineValue * power(2, level - 1);
+    rangeFrom = FLOOR(age / interval) * interval;
+    outValue := '[' || rangeFrom || '-' || rangeFrom + interval - 1 || ']';
+  ELSE
+    outValue := age;
+  END IF;
+END;

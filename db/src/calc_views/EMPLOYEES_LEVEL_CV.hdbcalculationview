@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="EMPLOYEES_LEVEL_CV" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="EMPLOYEES_LEVEL_CV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES">
+    <resourceUri>EMPLOYEES</resourceUri>
+  </DataSource>
+  <DataSource id="V_GEOGRAPHIC_HIERARCHY_LEVEL">
+    <resourceUri>V_GEOGRAPHIC_HIERARCHY_LEVEL</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="SITE_LEVEL_0"/>
+      <viewAttribute id="SITE_LEVEL_1"/>
+      <viewAttribute id="SITE_LEVEL_2"/>
+      <viewAttribute id="SITE_LEVEL_3"/>
+      <viewAttribute id="SITE_LEVEL_4"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="V_GEOGRAPHIC_HIERARCHY_LEVEL"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+      <viewAttribute id="SITE_LEVEL_0"/>
+      <viewAttribute id="SITE_LEVEL_1"/>
+      <viewAttribute id="SITE_LEVEL_2"/>
+      <viewAttribute id="SITE_LEVEL_3"/>
+      <viewAttribute id="SITE_LEVEL_4"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NAME" source="NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGE" source="AGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE_LEVEL_0" source="SITE_LEVEL_0"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE_LEVEL_1" source="SITE_LEVEL_1"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE_LEVEL_2" source="SITE_LEVEL_2"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE_LEVEL_3" source="SITE_LEVEL_3"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE_LEVEL_4" source="SITE_LEVEL_4"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE_LEVEL_4"/>
+    </input>
+  
+    <joinAttribute name="SITE"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ID"/>
+    </attribute>
+    <attribute id="NAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="NAME"/>
+    </attribute>
+    <attribute id="SITE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE"/>
+    </attribute>
+    <attribute id="GENDER" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="Join_1" columnName="GENDER"/>
+    </attribute>
+    <attribute id="AGE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGE"/>
+      <keyMapping columnObjectName="Join_1" columnName="AGE"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_0" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_0"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE_LEVEL_0"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_1" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_1"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE_LEVEL_1"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_2" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_2"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE_LEVEL_2"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_3" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_3"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE_LEVEL_3"/>
+    </attribute>
+    <attribute id="SITE_LEVEL_4" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE_LEVEL_4"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE_LEVEL_4"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="AVG_SALARY" order="13" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG_SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="1" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="BIGINT" length="">
+      <descriptions defaultDescription="EMPLOYEE_COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="221" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="61" y="384"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="301" y="384"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="221" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

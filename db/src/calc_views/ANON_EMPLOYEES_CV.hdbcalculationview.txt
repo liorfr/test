@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" id="ANON_EMPLOYEES_CV" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="ANON_EMPLOYEES_CV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES">
+    <resourceUri>EMPLOYEES</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:AnonymizeView" id="K-Anonymity" method="kAnonymity">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum" keepFlag="true"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NAME" source="NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGE" source="AGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+    </input>
+    <anonymizeParameterization>
+      <seqColumn>ID</seqColumn>
+      <k>2</k>
+      <qidColumn id="SITE"/>
+      <qidColumnHierarchy id="SITE">
+        <hierarchy>SITE_HIERARCHY</hierarchy>
+      </qidColumnHierarchy>
+    </anonymizeParameterization>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="K-Anonymity">
+  <attributes>
+    <attribute id="ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="K-Anonymity" columnName="ID"/>
+    </attribute>
+    <attribute id="NAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping columnObjectName="K-Anonymity" columnName="NAME"/>
+    </attribute>
+    <attribute id="SITE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="K-Anonymity" columnName="SITE"/>
+    </attribute>
+    <attribute id="GENDER" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="K-Anonymity" columnName="GENDER"/>
+    </attribute>
+    <attribute id="AGE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGE"/>
+      <keyMapping columnObjectName="K-Anonymity" columnName="AGE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="K-Anonymity" columnName="SALARY"/>
+    </measure>
+    <measure id="AVG_SALARY" order="8" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="K-Anonymity" columnName="SALARY"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="1" aggregationType="none" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="INTEGER" length="">
+      <descriptions defaultDescription="EMPLOYEE_COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      
+      
+      
+      
+      
+      
+      
+      
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="K-Anonymity" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="120" y="205"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="120" y="354"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

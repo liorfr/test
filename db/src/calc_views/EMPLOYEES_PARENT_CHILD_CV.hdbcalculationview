@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:DataFoundation="http://www.sap.com/ndb/BiModelDataFoundation.ecore" xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" id="EMPLOYEES_PARENT_CHILD_CV" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="EMPLOYEES_PARENT_CHILD_CV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES">
+    <resourceUri>EMPLOYEES</resourceUri>
+  </DataSource>
+  <DataSource id="GEOGRAPHIC_HIERARCHY">
+    <resourceUri>GEOGRAPHIC_HIERARCHY</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY"/>
+    
+      <viewAttribute id="SOCIAL_SECURITY"/>
+      <viewAttribute id="HOME_TELEPHONE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="CHILD"/>
+      <viewAttribute id="PARENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="GEOGRAPHIC_HIERARCHY"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_1" joinType="rightOuter">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+      <viewAttribute id="CHILD"/>
+      <viewAttribute id="PARENT"/>
+    
+      <viewAttribute id="SOCIAL_SECURITY"/>
+      <viewAttribute id="HOME_TELEPHONE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NAME" source="NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGE" source="AGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="SOCIAL_SECURITY" source="SOCIAL_SECURITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOME_TELEPHONE" source="HOME_TELEPHONE"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHILD" source="CHILD"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PARENT" source="PARENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="CHILD"/>
+    </input>
+    <joinAttribute name="SITE"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ID"/>
+    </attribute>
+    <attribute id="NAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="NAME"/>
+    </attribute>
+    <attribute id="SITE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE"/>
+    </attribute>
+    <attribute id="GENDER" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="Join_1" columnName="GENDER"/>
+    </attribute>
+    <attribute id="AGE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGE"/>
+      <keyMapping columnObjectName="Join_1" columnName="AGE"/>
+    </attribute>
+    <attribute id="CHILD" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHILD"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHILD"/>
+    </attribute>
+    <attribute id="PARENT" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PARENT"/>
+      <keyMapping columnObjectName="Join_1" columnName="PARENT"/>
+    </attribute>
+  
+    <attribute id="MASKED_SOCIAL_SECURITY" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MASKED SOCIAL SECURITY"/>
+      <maskingExpression>CONCAT(LEFT(&quot;MASKED_SOCIAL_SECURITY&quot;,2),CONCAT('-#####-####-',RIGHT(&quot;MASKED_SOCIAL_SECURITY&quot;,1)))</maskingExpression>
+  
+      <keyMapping columnObjectName="Join_1" columnName="SOCIAL_SECURITY"/>
+  
+    </attribute>
+    <attribute id="MASKED_HOME_TELEPHONE" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MASKED HOME TELEPHONE"/>
+      <maskingExpression>LEFT(CONCAT(CONCAT(LEFT(SUBSTR_BEFORE(&quot;MASKED_HOME_TELEPHONE&quot;, ' '),3), REPLACE_REGEXPR ('[0-9]' IN SUBSTRING(&quot;MASKED_HOME_TELEPHONE&quot;,LOCATE(&quot;MASKED_HOME_TELEPHONE&quot;,' '),LENGTH(SUBSTR_AFTER(&quot;MASKED_HOME_TELEPHONE&quot;,' '))-1) WITH '#')) ,RIGHT(&quot;MASKED_HOME_TELEPHONE&quot;,2)),20)</maskingExpression>
+      <keyMapping columnObjectName="Join_1" columnName="HOME_TELEPHONE"/>
+    </attribute>
+    <attribute id="HOME_TELEPHONE" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOME TELEPHONE"/>
+      <keyMapping columnObjectName="Join_1" columnName="HOME_TELEPHONE"/>
+    </attribute>
+    <attribute id="SOCIAL_SECURITY" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SOCIAL SECURITY"/>
+      <keyMapping columnObjectName="Join_1" columnName="SOCIAL_SECURITY"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="AVG_SALARY" order="9" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="10" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="BIGINT" length="">
+      <descriptions defaultDescription="EMPLOYEE COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+    
+      
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions>
+    <localDimension id="Geographic_Hierarchy">
+      <attributeRef xsi:type="DataFoundation:Attribute">CHILD</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">PARENT</attributeRef>
+      <hierarchies>
+        <hierarchy xsi:type="Dimension:ParentChildHierarchy" id="Geographic_Hierarchy" aggregateAllNodes="false" orphanedNodesHandling="ROOT_NODES" rootNodeVisibility="DO_NOT_ADD_ROOT_NODE" withRootNode="false" cacheEnabled="true" cycleHandling="BREAKUP" emptyValueIsNull="false">
+          <descriptions defaultDescription="Geographic Hierarchy"/>
+          <unassignedMemberProperties mode="FALSE"/>
+          <attributeParentPair attribute="CHILD" parentAttribute="PARENT"/>
+          <siblingOrder byAttribute="SITE" direction="ASC"/>
+        </hierarchy>
+      </hierarchies>
+    </localDimension>
+  </localDimensions>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="221" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="376"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="376"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="221" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

@@ -1,0 +1,21 @@
+ORG_ID,PARENT_ID,JOB_TITLE,DEPARTMENT,SEX
+1,,CEO,C Level,M
+2,1,EA,C Level,F
+3,1,COO,C Level,M
+4,1,CHRO,C Level,F
+5,1,CFO,C Level,F
+6,1,CMO,C Level,F
+7,3,SVP Sales,Sales,M
+8,5,SVP Finance,Finance,M
+9,6,SVP Marketing,Marketing,F
+10,7,US Sales,Sales,F
+11,7,EMEA Sales,Sales,M
+12,7,APJ Sales,Sales,M
+13,9,Global Marketing,Marketing,F
+14,9,Regional Marketing,Marketing,M
+15,11,UK Sales,Sales,M
+16,11,France Sales,Sales,M
+17,11,Germany Sales,Sales,M
+18,12,China Sales,Sales,M
+19,12,Australia Sales,Sales,M
+20,12,Nordic Sales,Sales,F

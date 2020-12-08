@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:DataFoundation="http://www.sap.com/ndb/BiModelDataFoundation.ecore" xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" id="undefined::CopyOfDIFF_PRIV_EMPLOYEE" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="DIFF_PRIV_EMPLOYEE"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="EMPLOYEES">
+    <resourceUri>EMPLOYEES</resourceUri>
+  </DataSource>
+  <DataSource id="EMPLOYEES_DIFF_PRIV">
+    <resourceUri>EMPLOYEES_DIFF_PRIV</resourceUri>
+  </DataSource>
+  <DataSource id="GEOGRAPHIC_HIERARCHY">
+    <resourceUri>GEOGRAPHIC_HIERARCHY</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="SALARY"/>
+    
+      <viewAttribute id="SITE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="ANON_SALARY"/>
+    
+      <viewAttribute id="SITE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="EMPLOYEES_DIFF_PRIV">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ANON_SALARY" source="SALARY"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:UnionView" id="Union_1">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+      <viewAttribute id="ANON_SALARY" aggregationType="sum"/>
+    
+      <viewAttribute id="SITE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="ANON_SALARY" null="true" value=""/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+    </input>
+    <input node="Projection_2" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="SALARY" null="true" value=""/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ANON_SALARY" source="ANON_SALARY"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="rightOuter">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="SALARY" aggregationType="sum"/>
+      <viewAttribute id="ANON_SALARY" aggregationType="sum"/>
+      <viewAttribute id="SITE"/>
+      <viewAttribute id="PARENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Union_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GENDER" source="GENDER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALARY" source="SALARY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ANON_SALARY" source="ANON_SALARY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="SITE"/>
+    </input>
+    <input node="GEOGRAPHIC_HIERARCHY">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PARENT" source="PARENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SITE" source="CHILD"/>
+    </input>
+    <joinAttribute name="SITE"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ID"/>
+    </attribute>
+    <attribute id="GENDER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="Join_1" columnName="GENDER"/>
+    </attribute>
+    <attribute id="SITE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SITE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SITE"/>
+    </attribute>
+    <attribute id="PARENT" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PARENT"/>
+      <keyMapping columnObjectName="Join_1" columnName="PARENT"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALARY" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="DIFF_PRIV_SALARY" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALARY DIFFERENTIAL PRIVACY"/>
+      <measureMapping columnObjectName="Join_1" columnName="ANON_SALARY"/>
+    </measure>
+    <measure id="AVG_SALARY" order="8" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="SALARY"/>
+    </measure>
+    <measure id="AVG_ANON_SALARY" order="9" aggregationType="avg" measureType="simple">
+      <descriptions defaultDescription="AVG DIFFERENTIAL PRIVACY SALARY"/>
+      <measureMapping columnObjectName="Join_1" columnName="ANON_SALARY"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="EMPLOYEE_COUNT" order="7" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" aggregatable="true" datatype="BIGINT" length="">
+      <descriptions defaultDescription="EMPLOYEE COUNT"/>
+      <exceptionAggregation>
+        <attribute attributeName="ID"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      </measure>
+    <measure id="SALARY_VARIANCE" order="10" aggregationType="sum" measureType="simple" datatype="DECIMAL" length="13" scale="3" presentationScale="2" expressionLanguage="SQL" aggregatable="true">
+      <descriptions defaultDescription="SALARY VARIANCE"/>
+      <formula>(&quot;SALARY&quot;-&quot;DIFF_PRIV_SALARY&quot;)/&quot;SALARY&quot;</formula>
+      </measure>
+  </calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions>
+    <localDimension id="Geographic_Hierarchy">
+      <attributeRef xsi:type="DataFoundation:Attribute">SITE</attributeRef>
+      <attributeRef xsi:type="DataFoundation:Attribute">PARENT</attributeRef>
+      <hierarchies>
+        <hierarchy xsi:type="Dimension:ParentChildHierarchy" id="Geographic_Hierarchy" aggregateAllNodes="false" orphanedNodesHandling="ROOT_NODES" rootNodeVisibility="ADD_ROOT_NODE_IF_DEFINED" cacheEnabled="true" cycleHandling="BREAKUP" emptyValueIsNull="false">
+          <descriptions defaultDescription="Geographic Hierarchy"/>
+          <unassignedMemberProperties mode="FALSE"/>
+          <attributeParentPair attribute="SITE" parentAttribute="PARENT"/>
+        </hierarchy>
+      </hierarchies>
+    </localDimension>
+  </localDimensions>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="241" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="496"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="496"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="222" y="356"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="222" y="236"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Union_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="167"/>
+    </shape>
+    <shape modelObjectName="GEOGRAPHIC_HIERARCHY" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="224"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
